@@ -2,11 +2,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
-
-// Our scraping tools
-// Axios is a promised-based http library, similar to jQuery's Ajax method
-// It works on the client and on the server
-var axios = require("axios");
+var request = require("request");
 var cheerio = require("cheerio");
 
 // Require all models
@@ -35,29 +31,29 @@ mongoose.connect("mongodb://localhost/week18Populater", {
 
 // Routes
 
-// A GET route for scraping the echojs website
+// A GET route for scraping the subreddit
 app.get("/scrape", function(req, res) {
-  // First, we grab the body of the html with request
-  axios.get("http://www.echojs.com/").then(function(response) {
-    // Then, we load that into cheerio and save it to $ for a shorthand selector
-    var $ = cheerio.load(response.data);
+  request("https://www.reddit.com/r/aww", function(error, response, html) {
 
-    // Now, we grab every h2 within an article tag, and do the following:
-    $("article h2").each(function(i, element) {
-      // Save an empty result object
-      var result = {};
+    // Load the HTML into cheerio and save it to a variable
+    // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
+    var $ = cheerio.load(html);
 
-      // Add the text and href of every link, and save them as properties of the result object
-      result.title = $(this)
-        .children("a")
-        .text();
-      result.link = $(this)
-        .children("a")
-        .attr("href");
+    // With cheerio, find each p-tag with the "title" class
+    // (i: iterator. element: the current element)
+    $("p.title").each(function(i, element) {
 
-      // Create a new Article using the `result` object built from scraping
-      db.Article.create(result)
-        .then(function(dbArticle) {
+      // Save the text of the element in a "title" variable
+      var title = $(element).text();
+
+      // In the currently selected element, look at its child elements (i.e., its a-tags),
+      // then save the values for any "href" attributes that the child elements may have
+      var link = $(element).children().attr("href");
+
+      db.Article.create({
+          title: title,
+          link: link
+        }).then(function(dbArticle) {
           // View the added result in the console
           console.log(dbArticle);
         })
@@ -66,11 +62,11 @@ app.get("/scrape", function(req, res) {
           return res.json(err);
         });
     });
-
-    // If we were able to successfully scrape and save an Article, send a message to the client
-    res.send("Scrape Complete");
   });
+  res.send("Scraped."); 
 });
+
+
 
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
@@ -120,6 +116,26 @@ app.post("/articles/:id", function(req, res) {
       // If an error occurred, send it to the client
       res.json(err);
     });
+});
+
+app.get("/delete/:id", function(req, res) {
+  // Remove a note using the objectID
+  db.Article.findByIdAndRemove({
+      _id: (req.params.id)
+    },
+    function(error, removed) {
+      // Log any errors from mongojs
+      if (error) {
+        console.log(error);
+        res.send(error);
+      } else {
+        // Otherwise, send the mongojs response to the browser
+        // This will fire off the success function of the ajax request
+        console.log(removed);
+        res.send(removed);
+      }
+    }
+  );
 });
 
 // Start the server
