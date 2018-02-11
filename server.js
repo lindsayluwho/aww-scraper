@@ -47,6 +47,7 @@ app.get("/scrape", function(req, res) {
 
     // With cheerio, find each p-tag with the "title" class
     // (i: iterator. element: the current element)
+       
     $("p.title").each(function(i, element) {
 
       // Save the text of the element in a "title" variable

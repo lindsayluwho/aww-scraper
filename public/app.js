@@ -4,7 +4,14 @@ function getArticles() {
     $("articles").empty();
     for (var i = 0; i < data.length; i++) {
       // Display the apropos information on the page
-      $("#articles").append(`<p data-id='${data[i]._id}'><button id='delete'>X</button> <button id='comment'>Add a comment</button> ${data[i].title}<br />${data[i].link}</p>`);
+      var url;
+      if(data[i].link.startsWith('/r')){
+        url = 'https://reddit.com' + data[i].link;
+      }
+      else url = data[i].link;
+
+      $("#articles").append(`<div class='card horizontal'><div class='card-stacked'><div class='card-content'><p data-id='${data[i]._id}'> ${data[i].title}<br /><a href='${url}'>${data[i].link}</a></p></div><div class='card-action' data-id='${data[i]._id}'><a href='#' id='delete'>Delete</a> <a href='#notes' id='comment'>Add a comment</a>`);
+      // <div class='card-image'><img src='${data[i].img}'></div>
     }
   });
 };
@@ -27,6 +34,7 @@ $("#scrape-button").click(function() {
 $(document).on("click", "#delete", function() {
   // Save the p tag that encloses the button
   var selected = $(this).parent();
+  var parentSelected = selected.parent();
   // Make an AJAX GET request to delete the specific note
   // this uses the data-id of the p-tag, which is linked to the specific note
   $.ajax({
@@ -36,7 +44,7 @@ $(document).on("click", "#delete", function() {
     // On successful call
     success: function(response) {
       // Remove the p-tag from the DOM
-      selected.remove();
+      parentSelected.parent().remove();
     }
   });
 });
@@ -60,11 +68,11 @@ $(document).on("click", "#comment", function() {
       // The title of the article
       $("#notes").append("<h2>" + data.title + "</h2>");
       // An input to enter a new title
-      $("#notes").append("<input id='titleinput' name='title' >");
+      $("#notes").append("<input id='titleinput' name='title' placeholder='title'>");
       // A textarea to add a new note body
-      $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
+      $("#notes").append("<textarea id='bodyinput' name='body' placeholder='Add your comment here'></textarea>");
       // A button to submit a new note, with the id of the article saved to it
-      $("#notes").append("<button data-id='" + thisId + "' id='savenote'>Save Note</button>");
+      $("#notes").append("<button class='btn' data-id='" + thisId + "' id='savenote'>Save Note</button>");
 
       // If there's a note in the article
       if (data.note) {

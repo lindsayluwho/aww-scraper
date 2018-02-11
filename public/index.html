@@ -1,50 +1,66 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>Scraping With Mongoose</title>
-    <style>
-      body { background-color: #F2F6D0 }
-      #wrapper {
-        width: 960px;
-        margin-left: auto;
-        margin-right: auto;
-        padding-top: 5%;
-      }
-      #articles {
-        display: inline-block;
-        overflow: auto;
-        width: 60%;
-        height: 700px;
-      }
-      #notes {
-        float: right;
-        width: 30%;
-      }
-      textarea, input {
-        display: block;
-        width: 100%;
-        background-color: #FCF5C7;
-      }
-      input {
-        height: 36px;
-        font-size: 24px;
-      }
-      textarea {
-        height: 200px;
-        font-size: 18px;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="wrapper">
-      <h1>Reddit /r/aww Scraper</h1>
-      <h2><i>The cutest subreddit ever!</i></h2>
-      <button id="scrape-button">Scrape Some AWWs</button><br>
-      <div id="articles"></div>
-      <div id="notes"></div>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Aww Scraper</title>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  
+  <style>
+  body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+  </style>
+  <!-- Compiled and minified JavaScript -->
+</head>
+
+<body>
+  <div id="wrapper">
+    <div class="row red lighten-2 white-text z-depth-2" style="padding-top: 25px">
+      <div class="container">
+    <h1 class="align-center" style="margin-top: 0px">Reddit /r/aww Scraper</h1></div></div>
+    <div class="container">
+    <h3><i>The cutest subreddit ever!</i></h3>
+    <button class="btn" id="scrape-button" style="margin-bottom: 30px">Scrape Some AWWs</button>
+    <br>
+    <div id="articles"></div>
+    <div id="notes" style="margin-top: 100px"></div>
+  </div>
+  <footer class="page-footer" style="margin-top: 100px">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Reddit /r/aww Scraper</h5>
+          <p class="grey-text text-lighten-4">Scrape in the most recent adorable content from the cutest subreddit ever.</p>
+        </div>
+        <div class="col l4 offset-l2 s12">
+          <h5 class="white-text">Additional Projects</h5>
+          <ul>
+            <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+            <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+            <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+            <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="app.js"></script>
-  </body>
+    <div class="footer-copyright">
+      <div class="container">
+        © 2018 Lindsay Brown
+        <a class="grey-text text-lighten-4 right" href="https://lindsayluwho.github.io">Portfolio</a>
+      </div>
+    </div>
+  </footer>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script src="app.js"></script>
+</body>
+
 </html>
