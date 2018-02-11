@@ -1,3 +1,8 @@
+ $(document).ready(function(){
+      $('.parallax').parallax();
+    });
+        
+
 function getArticles() {
   $.getJSON("/articles", function(data) {
     // For each one
